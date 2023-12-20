@@ -6,6 +6,9 @@ class Solution {
         return output2;
     }
     
+    //TC O(n long n)
+    //SC O(n)
+    
     
     int[][] mergeIntervals(Integer[][] intervals, int[][] output ){
         Integer[] bestmergedint = intervals[0];
@@ -21,13 +24,12 @@ class Solution {
                 output[k] = new int[2]; 
                 output[k][0] = bestmergedint[0];
                 output[k][1] = bestmergedint[1];
+                k=k+1;
                 
                 bestmergedint[0] = intervals[i][0];
                 bestmergedint[1] = intervals[i][1];
-                k=k+1;
             }
         }
-        
         
         output[k] = new int[2]; 
         output[k][0] = bestmergedint[0];
@@ -54,7 +56,6 @@ class Solution {
         };
         Arrays.sort(intgInt, comp);
         
-
         return intgInt;
     }
 }
