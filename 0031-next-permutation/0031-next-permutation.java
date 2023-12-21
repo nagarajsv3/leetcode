@@ -1,31 +1,26 @@
 class Solution {
     public void nextPermutation(int[] nums) {
+        
         //FInd the least significant index // 1 2 4 9 8 7 6 5 3 -> 4
+        int len = nums.length-1;
         int pivotidx = nums.length-2;
-        while(pivotidx >= 0 && nums[pivotidx] >= nums[pivotidx+1]){
+        while(pivotidx >=0 && nums[pivotidx] >= nums[pivotidx+1]){
             pivotidx--;
         }
         
-        //Find Best TO replace  // 5
-        if(pivotidx >= 0){
+        //Find the best digit to replace
+        if(pivotidx>=0){
             int bigidx = nums.length-1;
-            while(nums[bigidx] <= nums[pivotidx]){
+            while(bigidx >=0 && nums[bigidx] <= nums[pivotidx]){
                 bigidx--;
             }
-
-            //Swap //1 2 5 9 8 7 6 4 3
-            swap(nums, bigidx, pivotidx);
-        }
-
-        //Reverse right // 1 2 5 3 4 6 7 8 9 
-        if(pivotidx >= 0){
-            reverse(nums, pivotidx+1, nums.length-1);
-        }else{
-            reverse(nums, 0, nums.length-1);
+            //Swap            
+            swap(nums, pivotidx, bigidx);
         }
         
-        
-    }
+        //Reverse
+        reverse(nums, Math.max(pivotidx+1, 0), len);
+    }    
     
     void reverse(int[] nums, int left, int right){
         while(left <= right){
