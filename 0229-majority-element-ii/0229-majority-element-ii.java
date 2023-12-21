@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> majorityElement(int[] nums) {
-        
+        //Boyer-Moore Voting Algorithm
         int ele1 = Integer.MIN_VALUE;
         int cnt1 = 0;
         int ele2 = Integer.MIN_VALUE;
@@ -43,4 +43,7 @@ class Solution {
         return list;
 
     }
+    
+    //TC O(N)
+    //SC O(1)
 }
