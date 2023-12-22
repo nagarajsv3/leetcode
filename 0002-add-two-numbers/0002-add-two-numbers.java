@@ -10,13 +10,13 @@
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode start = new ListNode();
-        ListNode temp = start;
+        ListNode start = new ListNode();//Used to get the head of the node
+        ListNode temp = start; //used to connect nodes
         int sum =0;
         int carry = 0;
         
         while(l1 != null || l2 != null || carry!=0){ //
-            sum =0; //init sum to 0
+            sum =0; //init sum to 0 for each iteration
             if(l1 !=null){
                 sum = sum + l1.val;
                 l1=l1.next;
@@ -35,8 +35,6 @@ class Solution {
             ListNode node = new ListNode(sum);
             temp.next = node;
             temp = node;
-            
-            
         }
         return start.next;
     }
