@@ -9,73 +9,46 @@
  * }
  */
 class Solution {
-    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {//1 2 4   //1 3 4   1
+        if(list1==null && list2==null){ return null;}
+        if(list1==null){ return list2;}
+        if(list2==null){ return list1;}
         
-        if(list1 == null && list2 != null){
-            return list2;
-        }else if(list2 == null && list1 != null){
-            return list1;
-        }else if(list1 == null && list2 == null){
-            return list1;
+        ListNode res = null;
+        
+        if(list1.val <= list2.val){
+            res = list1;//1
+            
+        }else{
+
+            ListNode swp = list1;
+                list1 = list2;
+                list2 = swp;
+            res = list1;
         }
         
-        ListNode mergedList = null;
-        
-        ListNode list1Ref = list1;
-        ListNode list2Ref = list2;
-        ListNode mergedListRef = mergedList;
-        int counter = 0;
-        while(list1Ref!=null && list2Ref!=null){
-            counter++;
-            if(list1Ref.val <= list2Ref.val){
-                
-                ListNode temp = new ListNode(list1Ref.val);
-                System.out.println("temp val="+temp.val+"temp next="+temp.next);
-                if(mergedList == null){
-                    System.out.println("null Block. Iteration="+counter);
-                    mergedList = temp;
-                    mergedListRef = mergedList;
-                
-                }else{
-                    System.out.println("Non null Block. Iteration="+counter);
-                    mergedListRef.next=temp;
-                    mergedListRef = mergedListRef.next;
-                }
-                
-                list1Ref = list1Ref.next;
-                
-            }else{
-                ListNode temp = new ListNode(list2Ref.val);
-                System.out.println("temp val="+temp.val+"temp next="+temp.next);
-                
-                if(mergedList == null){
-                    System.out.println("null Block. Iteration="+counter);
-                    mergedList = temp;
-                    mergedListRef = mergedList;
-                }else{
-                    System.out.println("Non null Block. Iteration="+counter);
-                    mergedListRef.next = temp;
-                    mergedListRef = mergedListRef.next;
-                }
-                
-                list2Ref = list2Ref.next;
-                
-                
+        while(list1 !=null && list2 !=null){
+            ListNode temp = new ListNode();
+            while(list1!=null && list1.val <= list2.val){
+                temp = list1; // 1
+                list1 = list1.next;
             }
+            temp.next = list2;
             
-            System.out.println("mergedListRef.Val="+mergedListRef.val);
-            System.out.println("mergedListRef.Next="+mergedListRef.next);
-            System.out.println("********************************"+mergedListRef.next);
-            
+            if(list1!=null){
+                ListNode swp = list1;
+                list1 = list2;
+                list2 = swp;
+                            
+            }
         }
-        
-        if(list1Ref==null && list2Ref!=null){
-            mergedListRef.next = list2Ref ;
-        }else if(list2Ref==null && list1Ref != null){
-            mergedListRef.next = list1Ref;
-        }
-        
-        return mergedList;
-        
+        return res;
     }
+    
+    void swap(ListNode list1, ListNode list2){
+        ListNode temp = list1;
+        list1 = list2;
+        list2 = temp;
+    }
+    
 }
