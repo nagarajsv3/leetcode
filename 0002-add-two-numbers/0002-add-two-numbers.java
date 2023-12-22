@@ -35,9 +35,7 @@ class Solution {
             ListNode node = new ListNode(sum);
             temp.next = node;
             temp = node;
-            /*if(start.next == null){
-                start.next = node;
-            }*/
+            
             
         }
         return start.next;
