@@ -11,31 +11,20 @@
 class Solution {
     public ListNode reverseList(ListNode head) {
         
-        if(head == null){
-            return head;
-        }
+        ListNode dummy = null;
+        ListNode next = null;
         
-        ListNode previousNodeRef = null;
-        ListNode nextNodeRef = null;
-        ListNode currentProcessingNodeRef = head;
-        
-        while(currentProcessingNodeRef != null){
-            //Things Needed for Next Processing
-            nextNodeRef = currentProcessingNodeRef.next;
+        while(head != null){
+            //Pre
+            next = head.next;
             
-            //Processing
-            currentProcessingNodeRef = new ListNode(currentProcessingNodeRef.val, previousNodeRef);
+            //Process
+            head.next = dummy;
             
-            //Post Processing
-            previousNodeRef = currentProcessingNodeRef;
-            currentProcessingNodeRef = nextNodeRef;
-                
-            
-        }
-        
-        return previousNodeRef;
-        
+            //Post
+            dummy = head;
+            head = next;
+        }  
+        return dummy;
     }
-    
-    
 }
