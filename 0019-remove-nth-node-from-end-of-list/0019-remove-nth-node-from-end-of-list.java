@@ -15,17 +15,17 @@ class Solution {
         ListNode slow = dummy;
         ListNode fast = dummy;
         
-        int cnt = 0;
-        while(cnt<n){
-            fast= fast.next;
-            cnt++;
+        for(int i=1;i<=n;i++){
+            fast = fast.next;
         }
+        
         while(fast.next!=null){
-            slow= slow.next;
-            fast = fast.next;    
+            slow = slow.next;
+            fast = fast.next;
         }
+        
         slow.next = slow.next.next;
-             
+        
         return dummy.next;
     }
 }
