@@ -36,48 +36,34 @@ class Solution {
     // Function to detect cycle in an undirected graph.
     public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
         // Code here
+        
         boolean[] visited = new boolean[V];
-        
-        Queue<Pair> queue = new ArrayDeque<>();
-        
-        for(int i=0; i<V; i++){
+        for(int i=0;i<V;i++){
             if(visited[i] == false){
-                queue.offer(new Pair(i,-1));
-                visited[i] = true;
-                
-                while(! queue.isEmpty()){
-                    Pair polled = queue.poll();
-                    int cur = polled.node;
-                    int parent = polled.parent;
-                    
-                    ArrayList<Integer> neighs = adj.get(cur);
-                    for(int neigh : neighs){
-                        if(visited[neigh] == true ){
-                            //who visited ?
-                            if(neigh != parent){
-                                return true;
-                            }
-                        }else{
-                            queue.offer(new Pair(neigh, cur));
-                            visited[neigh] = true;
-                        }
-                    }
+                if(dfs(i, -1, visited, adj)){
+                    return true;                
                 }
-                
             }
-            
-                
-                
         }
         return false;
     }
-}
-
-class Pair{
-    int node;
-    int parent;
-    Pair(int _n, int _p){
-        this.node = _n;
-        this.parent = _p;
+    
+    boolean dfs(int node, int parent, boolean[] visited, ArrayList<ArrayList<Integer>> adj){
+        visited[node] = true;
+        
+        for(int neigh : adj.get(node)){
+            if(visited[neigh] == true){
+                if(neigh != parent){
+                    return true;
+                }
+            }else{
+                if(dfs(neigh, node, visited, adj)){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
+    
 }
