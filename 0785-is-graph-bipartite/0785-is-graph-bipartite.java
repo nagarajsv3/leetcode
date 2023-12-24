@@ -1,4 +1,6 @@
 class Solution {
+    
+    //Using BFS
     public boolean isBipartite(int[][] graph) {
         int len = graph.length;
         
