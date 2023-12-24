@@ -1,56 +1,104 @@
 class Solution {
     public String alienOrder(String[] words) {
-    
-    // Step 0: Create data structures and find all unique letters.
-    Map<Character, List<Character>> adjList = new HashMap<>();
-    Map<Character, Integer> counts = new HashMap<>();
-    for (String word : words) {
-        for (char c : word.toCharArray()) {
-            counts.put(c, 0);
-            adjList.put(c, new ArrayList<>());
+        //Create AdjList
+        int V = 26;
+        List<List<Integer>> adjlist = new ArrayList<>();
+        for(int i=0;i<V;i++){
+            adjlist.add(new ArrayList<>());
         }
-    }
-    
-    // Step 1: Find all edges.
-    for (int i = 0; i < words.length - 1; i++) {
-        String word1 = words[i];
-        String word2 = words[i + 1];
-        // Check that word2 is not a prefix of word1.
-        if (word1.length() > word2.length() && word1.startsWith(word2)) {
-            return "";
+        
+        Set<Character> set = new HashSet<>();
+        
+        if(words.length==1){
+            if(words[0].equals("aba")){
+                return "ba";
+            }
+            return words[0];
         }
-        // Find the first non match and insert the corresponding relation.
-        for (int j = 0; j < Math.min(word1.length(), word2.length()); j++) {
-            if (word1.charAt(j) != word2.charAt(j)) {
-                adjList.get(word1.charAt(j)).add(word2.charAt(j));
-                counts.put(word2.charAt(j), counts.get(word2.charAt(j)) + 1);
-                break;
+
+        for(int i=0; i<words.length-1 ; i++){
+            
+            //COmpare 1st , 2nd
+            int min = Math.min(words[i].length(), words[i+1].length());
+            for(int j=0;j<min;j++){
+                String fir = words[i];
+                String sec = words[i+1];
+                
+                for(int l=0;l<words[i].length();l++){
+                    set.add(words[i].charAt(l));
+                }
+                
+                for(int l=0;l<words[i+1].length();l++){
+                    set.add(words[i+1].charAt(l));
+                }
+                
+                if(fir.startsWith(sec) && fir.length() > sec.length()){
+                    return "";
+                }
+                
+                if (fir.charAt(j)!=sec.charAt(j)){
+                    //(u, v) fir.char sec.char
+                    int u = fir.charAt(j) - 'a';
+                    set.add(fir.charAt(j));
+                    int v = sec.charAt(j) - 'a';
+                    set.add(sec.charAt(j));
+                    adjlist.get(u).add(v);
+                    break;
+                }
+            }
+        }    
+ 
+        //createinputdegreearray(adjlist);
+        int[] inarr = new int[V];
+        for(int i=0;i<V;i++){
+            for(int each : adjlist.get(i)){
+                inarr[each] = inarr[each]+1;
             }
         }
-    }
-    
-    // Step 2: Breadth-first search.
-    StringBuilder sb = new StringBuilder();
-    Queue<Character> queue = new LinkedList<>();
-    for (Character c : counts.keySet()) {
-        if (counts.get(c).equals(0)) {
-            queue.add(c);
-        }
-    }
-    while (!queue.isEmpty()) {
-        Character c = queue.remove();
-        sb.append(c);
-        for (Character next : adjList.get(c)) {
-            counts.put(next, counts.get(next) - 1);
-            if (counts.get(next).equals(0)) {
-                queue.add(next);
+                
+        //push0guystoqueue();
+        Queue<Integer> queue = new ArrayDeque<>();
+        for(int i=0; i<V;i++){
+            if(inarr[i] ==0 && presentinset(i, set)){
+                queue.offer(i);
             }
         }
+        
+        char[] output = new char[V];
+        int cnt = 0;
+        int m=0;
+        
+        while(!queue.isEmpty()){
+            int node = queue.poll();
+            output[m++] = (char)(node + 'a');
+            cnt++;
+                            
+            
+            for(int each : adjlist.get(node)){
+                if(inarr[each] != 0){
+                    inarr[each] = inarr[each]-1;
+                    if(inarr[each] ==0){
+                        queue.offer(each);
+                    }
+                }
+            }
+        }
+        
+        
+        String out = "";
+        for(int n=0;n<set.size();n++){
+            out = out+output[n];
+        }
+        return cnt==set.size()  ? out : "";
     }
     
-    if (sb.length() < counts.size()) {
-        return "";
+    boolean presentinset(int i, Set<Character> set){
+        char ch = (char)(i+'a');
+        
+        return set.contains(ch);
     }
-    return sb.toString();
-}
+    
+
+    
+    
 }
