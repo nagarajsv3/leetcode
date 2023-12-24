@@ -1,0 +1,45 @@
+class Solution {
+    
+    public boolean isCycleBFS(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        boolean[] visited = new boolean[V];
+        
+        Queue<Pair> queue = new ArrayDeque<>();
+        
+        for(int i=0; i<V; i++){
+            if(visited[i] == false){
+                queue.offer(new Pair(i,-1));
+                visited[i] = true;
+                
+                while(! queue.isEmpty()){
+                    Pair polled = queue.poll();
+                    int cur = polled.node;
+                    int parent = polled.parent;
+                    
+                    ArrayList<Integer> neighs = adj.get(cur);
+                    for(int neigh : neighs){
+                        if(visited[neigh] == true ){
+                            //who visited ?
+                            if(neigh != parent){
+                                return true;
+                            }
+                        }else{
+                            queue.offer(new Pair(neigh, cur));
+                            visited[neigh] = true;
+                        }
+                    }
+                }   
+            }     
+        }
+        return false;
+    }
+}
+
+class Pair{
+    int node;
+    int parent;
+    Pair(int _n, int _p){
+        this.node = _n;
+        this.parent = _p;
+    }
+}
