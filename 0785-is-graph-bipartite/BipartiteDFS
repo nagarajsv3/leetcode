@@ -1,0 +1,94 @@
+package programs.graphs.bfs;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Queue;
+
+public class BipartiteDFS {
+
+    public static boolean isBipartite(int V, ArrayList<ArrayList<Integer>>adj)
+    {
+        // Code here
+        int[] color=new int[V];
+        Arrays.fill(color, -1);
+
+        for(int i=0 ; i<V ; i++){
+            if(color[i] == -1){
+                if(bipartitedfs(i, 0, color, adj) == false){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    static boolean bipartitedfs(int node, int code, int[] color, ArrayList<ArrayList<Integer>>adj){
+        color[node] = code;
+
+        for(int neigh : adj.get(node)){
+            if(color[neigh] ==-1){
+                if(bipartitedfs(neigh, 1-code, color, adj) == false){
+                    return false;
+                }
+            }else{
+                if(color[node] == color[neigh]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+
+
+    public static void main(String[] args) {
+        ArrayList<ArrayList<Integer>> adjlist = new ArrayList<>();
+        for(int i=0; i<=9; i++){
+            adjlist.add(new ArrayList<>());
+        }
+
+        adjlist.get(1).add(2);
+        adjlist.get(2).add(1);
+        adjlist.get(1).add(6);
+        adjlist.get(6).add(1);
+
+        adjlist.get(2).add(3);
+        adjlist.get(3).add(2);
+        adjlist.get(2).add(4);
+        adjlist.get(4).add(2);
+
+        adjlist.get(6).add(7);
+        adjlist.get(7).add(6);
+        adjlist.get(6).add(8);
+        adjlist.get(8).add(6);
+
+        adjlist.get(4).add(5);
+        adjlist.get(5).add(4);
+        adjlist.get(7).add(9);
+        adjlist.get(9).add(7);
+
+        adjlist.get(4).add(9);
+        adjlist.get(9).add(4);
+
+
+        System.out.println(isBipartite(10, adjlist));
+
+        ArrayList<ArrayList<Integer>> adjlist2 = new ArrayList<>();
+        for(int i=0; i<=3; i++){
+            adjlist2.add(new ArrayList<>());
+        }
+
+        adjlist2.get(0).add(1);
+        adjlist2.get(1).add(0);
+        adjlist2.get(1).add(2);
+        adjlist2.get(2).add(1);
+        adjlist2.get(2).add(3);
+        adjlist2.get(3).add(2);
+        adjlist2.get(3).add(1);
+        adjlist2.get(1).add(3);
+
+        System.out.println(isBipartite(4, adjlist2));
+    }
+}
