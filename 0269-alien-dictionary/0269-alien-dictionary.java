@@ -10,10 +10,9 @@ class Solution {
         Set<Character> set = new HashSet<>();
         
         if(words.length==1){
-            if(words[0].equals("aba")){
-                return "ba";
-            }
-            return words[0];
+                for(int l=0;l<words[0].length();l++){
+                    set.add(words[0].charAt(l));
+                }        
         }
 
         for(int i=0; i<words.length-1 ; i++){
