@@ -1,53 +1,46 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prereqs) {
-        //Topological Sort - BFS
-        //Create Adjacency List using Prereq
-        List<List<Integer>> adjlist = new ArrayList<>();
-        for(int i=0;i<numCourses ; i++){
+        //prereq[v][u] - directed    
+        //Create AdjList
+        List<List<Integer>> adjlist  = new ArrayList<>();
+        for(int i=0 ; i< numCourses ; i++){
             adjlist.add(new ArrayList<>());
         }
         
-        for(int i=0; i<prereqs.length ; i++){
-            int v = prereqs[i][0];
-            int u = prereqs[i][1];
-            adjlist.get(u).add(v);
-        }
-        
-        //Create In degree counter array
+        //create in degree array & updates adjlist
         int[] inarr = new int[numCourses];
-        for(int i=0;i<numCourses ; i++){
-            for(int each : adjlist.get(i)){
-                inarr[each] = inarr[each] + 1; 
-            }
+
+        for(int i=0; i< prereqs.length; i++){
+            adjlist.get(prereqs[i][1]).add(prereqs[i][0]);
+            inarr[prereqs[i][0]] = inarr[prereqs[i][0]] + 1;
         }
         
-        //Push item with indegree ==0 to Q
+        //Add item with 0 to Q
         Queue<Integer> queue = new ArrayDeque<>();
-        for(int j=0; j<numCourses ; j++){
-            if(inarr[j] == 0){
-                queue.offer(j);
+        for(int i=0; i< numCourses ; i++){
+            if(inarr[i] ==0){
+                queue.offer(i);
             }
         }
         
-        int[] output = new int[numCourses];
         int cnt = 0;
-        int k=0;
-        
-        while(!queue.isEmpty()){
+        int[] output= new int[numCourses];
+        int m=0;
+        while(! queue.isEmpty()){
             int node = queue.poll();
-            output[k++] = node; 
+            output[m++] = node;
             cnt++;
             
-            for(int each : adjlist.get(node)){
-                if(inarr[each] != 0){
-                    inarr[each] = inarr[each] -1;
-                    if(inarr[each] == 0){
-                        queue.offer(each);
+            for(int neigh : adjlist.get(node)){
+                if(inarr[neigh] != 0){
+                    inarr[neigh] = inarr[neigh] - 1;
+                    if(inarr[neigh] == 0){
+                        queue.offer(neigh);
                     }
                 }
             }
         }
-            
-        return cnt == numCourses ? output : new int[]{};
+        
+        return cnt == numCourses  ? output : new int[]{}; 
     }
 }
