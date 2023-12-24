@@ -64,8 +64,74 @@ class Solution
     static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
     {
         // add your code here
-        return topoSortDFS(V, adj);
+        //return topoSortDFS(V, adj);
+        
+        return toposortBFS(V, adj);
     }
+    
+    static int[] toposortBFS(int V, ArrayList<ArrayList<Integer>> adj){
+        //Create Indegree counter array
+        int[] indgcnt = new int[V];
+        for(int i=0; i<V;i++){
+            for(int each : adj.get(i)){
+                indgcnt[each] = indgcnt[each] + 1;
+            }
+        }
+        
+        //Add nodes whose indegree count is zero to q
+        Queue<Integer> queue = new ArrayDeque<>();
+        for(int i=0;i<V;i++){
+            if(indgcnt[i] == 0){
+                queue.offer(i);
+            }
+        }
+        
+        //Create Output
+        int[] output = new int[V];
+        int k=0;
+        while(! queue.isEmpty()){
+            int node = queue.poll();
+            output[k++] = node;
+            //Cut connection from all neighbours
+            for(int neigh : adj.get(node)){
+                if(indgcnt[neigh] != 0){
+                    indgcnt[neigh] = indgcnt[neigh]-1;
+                    if(indgcnt[neigh]==0){
+                        queue.offer(neigh);
+                    }
+                } 
+            }
+            
+        }
+        return output;
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     static int[] topoSortDFS(int V, ArrayList<ArrayList<Integer>> adj) 
     {
