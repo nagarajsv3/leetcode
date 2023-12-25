@@ -1,103 +1,107 @@
 class Solution {
     public String alienOrder(String[] words) {
-        //Create AdjList
-        int V = 26;
+        int V=26;
+        //Create Adjacenecy List
         List<List<Integer>> adjlist = new ArrayList<>();
+        Set<Character> set = new HashSet<>();
         for(int i=0;i<V;i++){
             adjlist.add(new ArrayList<>());
         }
         
-        Set<Character> set = new HashSet<>();
-        
-        if(words.length==1){
-                for(int l=0;l<words[0].length();l++){
-                    set.add(words[0].charAt(l));
-                }        
+        if(words.length ==1){
+            for(int fps=0;fps<words[0].length();fps++){
+                set.add(words[0].charAt(fps));
+            }                
         }
-
-        for(int i=0; i<words.length-1 ; i++){
+        
+        //Populate Adjacency List
+        for(int i=0;i<words.length-1;i++){
+            String fword = words[i];
+            String sword = words[i+1];
             
-            //COmpare 1st , 2nd
-            int min = Math.min(words[i].length(), words[i+1].length());
-            for(int j=0;j<min;j++){
-                String fir = words[i];
-                String sec = words[i+1];
-                
-                for(int l=0;l<words[i].length();l++){
-                    set.add(words[i].charAt(l));
-                }
-                
-                for(int l=0;l<words[i+1].length();l++){
-                    set.add(words[i+1].charAt(l));
-                }
-                
-                if(fir.startsWith(sec) && fir.length() > sec.length()){
-                    return "";
-                }
-                
-                if (fir.charAt(j)!=sec.charAt(j)){
-                    //(u, v) fir.char sec.char
-                    int u = fir.charAt(j) - 'a';
-                    set.add(fir.charAt(j));
-                    int v = sec.charAt(j) - 'a';
-                    set.add(sec.charAt(j));
-                    adjlist.get(u).add(v);
+            if(fword.startsWith(sword) && fword.length() > sword.length()){
+                return "";
+            }
+            
+            if(i==0){
+                for(int fps=0;fps<fword.length();fps++){
+                    set.add(fword.charAt(fps));
+                }                
+            }
+            
+            for(int sps=0;sps<sword.length();sps++){
+                set.add(sword.charAt(sps));
+            }
+            
+            
+            int min = Math.min(fword.length(), sword.length());
+            
+            for(int l=0;l<min; l++){
+                if(fword.charAt(l) != sword.charAt(l)){
+                    set.add(fword.charAt(l));
+                    set.add(sword.charAt(l));
+                    adjlist.get(chartoint(fword.charAt(l))).add(chartoint(sword.charAt(l)));
                     break;
                 }
             }
-        }    
- 
-        //createinputdegreearray(adjlist);
+        }
+        
+        //Populate Indegree array
         int[] inarr = new int[V];
         for(int i=0;i<V;i++){
             for(int each : adjlist.get(i)){
-                inarr[each] = inarr[each]+1;
+                inarr[each] = inarr[each] + 1; 
             }
         }
-                
-        //push0guystoqueue();
+        
+        //Calculate Output
         Queue<Integer> queue = new ArrayDeque<>();
-        for(int i=0; i<V;i++){
-            if(inarr[i] ==0 && presentinset(i, set)){
+                                                    
+        for(int i=0;i<V ; i++){
+            if(inarr[i] ==0 && set.contains(inttochar(i))){
                 queue.offer(i);
             }
         }
-        
-        char[] output = new char[V];
-        int cnt = 0;
-        int m=0;
-        
+                                                                
+        //Populate Output and counter
+        int[] output = new int[set.size()];
+        int counter = 0;
+        int m=0;                                                    
         while(!queue.isEmpty()){
             int node = queue.poll();
-            output[m++] = (char)(node + 'a');
-            cnt++;
-                            
+            counter++;
+            output[m++] = node;
             
-            for(int each : adjlist.get(node)){
-                if(inarr[each] != 0){
-                    inarr[each] = inarr[each]-1;
-                    if(inarr[each] ==0){
-                        queue.offer(each);
+            for(int neigh : adjlist.get(node)){
+                if(inarr[neigh] != 0){
+                    inarr[neigh] = inarr[neigh] -1 ;
+                    if(inarr[neigh] == 0){
+                        queue.offer(neigh);
                     }
                 }
             }
         }
-        
-        
-        String out = "";
-        for(int n=0;n<set.size();n++){
-            out = out+output[n];
+                                                                
+        //populate output in string
+        if(counter==set.size()){
+            String s = "";
+            for(int i=0;i<output.length; i++){
+                s = s+ inttochar(output[i]);
+            }
+            return s;
+        }else{
+            return "";
         }
-        return cnt==set.size()  ? out : "";
+       
+    }
+                                                                
+      
+    
+    int chartoint(char ch){
+        return ch - 'a';
     }
     
-    boolean presentinset(int i, Set<Character> set){
-        char ch = (char)(i+'a');
-        
-        return set.contains(ch);
+    char inttochar(int in){
+        return (char)(in + 'a');
     }
-    
-
-    
-    
 }
