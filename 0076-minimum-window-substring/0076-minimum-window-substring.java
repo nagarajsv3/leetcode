@@ -1,66 +1,68 @@
 class Solution {
     public String minWindow(String s, String t) {
-        
-        if(s.isEmpty() || t.isEmpty() || (t.length() > s.length())){
+        //"ADOBECODEBANC" "ABC"
+        if(t ==null || s==null){
             return "";
         }
-
-        if(s.equals(t)){
+        if(s.length() == t.length() && s.equals(t)){
             return t;
         }
-        Map<Character, Integer> map = new HashMap<>();
-        for(int i=0;i<t.length();i++){
-            char tch = t.charAt(i);
-            map.put(tch, map.getOrDefault(tch,0) + 1);        
-        }
+        
+        //Calculate Freq Map of t
+        Map<Character , Integer> map = getFrequencyMap(t);
         int count = map.size();
-
-        int i = 0; //Pointer to release unwanted chars. increase the freq in map
-        int j = 0; //Pointer to acquire wanted chars. decrease the freq in map
-
-        int left = -1;
-        int right = -1;
+        
         int min = Integer.MAX_VALUE;
+        int substracquirer = 0;
+        int bestsubfinder = 0;
+        int len = s.length();
+        String substr = "";
         boolean found = false;
-
-        //Acquire Substring which has all chars
-        while( j < s.length()){
-            char sch = s.charAt(j);
-            j++;
-
-            if(map.containsKey(sch)){
-                map.put(sch, map.get(sch) - 1);
-                if(map.get(sch) == 0){
-                    count -- ; 
-                }
-
-                if(count > 0){
-                    continue;
-                }
-
-                //Shorten the substring which has all chars
-                while(i < s.length() && count == 0){
-                    found= true;
-                    char ich =s.charAt(i);    
-                    i++;
-
-                    if(map.containsKey(ich)){
-                        map.put(ich, map.get(ich)+1);
-                        if(map.get(ich) > 0){
-                            count++;
+        
+        while(substracquirer < len){
+            char ch = s.charAt(substracquirer);
+            
+            substracquirer++;
+            if(map.containsKey(ch)){
+                map.put(ch, map.get(ch) -1);
+                if(map.get(ch) == 0){
+                    count = count -1;
+                    if(count != 0){
+                        continue;
+                    }else{
+                        while(count==0 && bestsubfinder < len){
+                            
+                            found = true;
+                            char rch = s.charAt(bestsubfinder);
+                                       
+                            bestsubfinder++;
+                            if(map.containsKey(rch)){
+                                map.put(rch, map.get(rch) + 1);
+                                if(map.get(rch) > 0){
+                                    count = count + 1;
+                                }
+                            }
                         }
+                        
+                        if(found && min > (substracquirer - bestsubfinder + 1)){
+                            
+                            min = substracquirer - bestsubfinder + 1;
+                            substr = s.substring(bestsubfinder-1, substracquirer);
+                        }                                                                     
                     }
-                }
-
-                if(min > (j-i)){
-                    found =true;
-                    min = j-i;
-                    left = i-1;
-                    right = j-1;
                 }
             }
         }
-        return !found ? "": s.substring(left, right+1); 
-
+        return substr;
+        
+    }
+    
+    Map<Character , Integer> getFrequencyMap(String t){
+        Map<Character , Integer> map = new HashMap<>();
+        for(int i=0;i<t.length();i++){
+            char ch = t.charAt(i);
+            map.put(ch, map.getOrDefault(ch,0)+1);
+        }
+        return map;
     }
 }
