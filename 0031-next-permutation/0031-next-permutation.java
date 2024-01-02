@@ -1,38 +1,42 @@
 class Solution {
     public void nextPermutation(int[] nums) {
-        
-        //FInd the least significant index // 1 2 4 9 8 7 6 5 3 -> 4
         int len = nums.length-1;
-        int pivotidx = nums.length-2;
-        while(pivotidx >=0 && nums[pivotidx] >= nums[pivotidx+1]){
-            pivotidx--;
+        int leastsigidx = len-1;
+        
+        //1 2 4 9 8 7 6 5 3 -> 4th pos
+        while( leastsigidx>=0  && nums[leastsigidx] >= nums[leastsigidx + 1]){
+            leastsigidx--;
         }
         
-        //Find the best digit to replace
-        if(pivotidx>=0){
-            int bigidx = nums.length-1;
-            while(bigidx >=0 && nums[bigidx] <= nums[pivotidx]){
-                bigidx--;
+        if(leastsigidx >=0){
+            int bestidx = len;
+            while(bestidx>=0 && nums[bestidx] <= nums[leastsigidx]){
+                bestidx--;
             }
-            //Swap            
-            swap(nums, pivotidx, bigidx);
+            
+            if(leastsigidx >=0 && bestidx >=0){
+                swap(nums, leastsigidx, bestidx);
+            }
+            
         }
         
-        //Reverse
-        reverse(nums, Math.max(pivotidx+1, 0), len);
-    }    
+        reverse(nums, Math.max(0, leastsigidx+1), len);
+        
+        
+        
+    }
     
     void reverse(int[] nums, int left, int right){
-        while(left <= right){
+        while(left<=right){
             swap(nums, left, right);
             left++;
             right--;
         }
     }
     
-    void swap(int[] nums, int left, int right){
-        int temp = nums[left];
-        nums[left ] = nums[right];
-        nums[right] = temp;
+    void swap(int[] nums, int fir, int sec){
+        int temp = nums[fir];
+        nums[fir] = nums[sec];
+        nums[sec] = temp;
     }
 }
