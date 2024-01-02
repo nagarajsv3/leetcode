@@ -5,13 +5,11 @@ class RecentCounter {
     }
     
     public int ping(int t) {
+        while(!deq.isEmpty() && deq.peek() < t-3000){
+           deq.poll();
+        }
 
-            while(!deq.isEmpty() && deq.getLast() < t-3000){
-                deq.removeLast();
-            }
-
-        
-        deq.addFirst(t);
+        deq.offer(t);
         return deq.size();
     }
 }
