@@ -3,13 +3,10 @@ class Solution {
         if(strs.length ==1){
             return strs[0];
         }else{
-            String prefix = null;
+            String prefix = strs[0];
             for(int i=0; i<strs.length-1 ; i++){
-                if(i==0){
-                    prefix = prefixOf2Word(strs[i], strs[i+1]);
-                }else{
                     prefix = prefixOf2Word(prefix, strs[i+1]);
-                }
+                
             }
             
             return prefix;
