@@ -1,52 +1,50 @@
 class Solution {
     public int findCircleNum(int[][] isConnected) {
-
-        ArrayList<ArrayList<Integer>> adjList = getAdjacencyListFromMatrix(isConnected);
-        boolean[] isvisited  = new boolean[isConnected.length];
-        int counter = 0;
-
-        for (int i=0; i<isvisited.length ; i++){
-            if(isvisited[i] == false){
-                counter++;
-                dfs(i , isvisited, adjList );
+        
+        int n = isConnected.length;
+        boolean[] isvisited = new boolean[n];
+        List<List<Integer>> adjlist = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adjlist.add(new ArrayList<>());
+        }
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i!=j && isConnected[i][j] == 1){
+                    adjlist.get(i).add(j);
+                }
             }
         }
-    
+        
+        int counter=0;
+        for(int i=0;i<n;i++){
+            if(isvisited[i] ==false){
+                bfs(i, isvisited, adjlist );
+                counter++;
+            }
+        }
+        
         return counter;
     }
-
-    void dfs(int node, boolean[] isvisited, ArrayList<ArrayList<Integer>> adjList){
-        isvisited[node] = true;
-
-        ArrayList<Integer> neighs = adjList.get(node);
-        for(int neigh : neighs ){
-            if(isvisited[neigh] == false){
-                dfs(neigh, isvisited, adjList);
+    
+    void bfs(int node, boolean[] visited, List<List<Integer>> adjlist ){
+        
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(node);
+        visited[node] = true;
+        
+        while(! queue.isEmpty()){
+            int pnode = queue.poll();
+            
+            for(int neigh : adjlist.get(pnode)){
+                if(visited[neigh] == false){
+                    queue.offer(neigh);
+                    visited[neigh] = true;
+                }
             }
         }
-    }
-
-    ArrayList<ArrayList<Integer>> getAdjacencyListFromMatrix(int[][] isConnected){
-        ArrayList<ArrayList<Integer>> adjList = new ArrayList<ArrayList<Integer>>();
         
-        int vertices = isConnected.length;
-
-        for(int m=0; m< vertices; m++){
-            adjList.add(new ArrayList<>());
-        }
-
-        for(int i=0; i<vertices; i++){
-            for(int j=0; j<vertices; j++){
-                if(isConnected[i][j] ==1 && (i!=j)){
-                    adjList.get(i).add(j);
-                    adjList.get(j).add(i);
-                }
-            } 
-        }
-
-        return adjList;
     }
-
-
+    
     
 }
