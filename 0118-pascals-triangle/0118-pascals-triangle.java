@@ -1,24 +1,20 @@
 class Solution {
     public List<List<Integer>> generate(int numRows) {
-        List<List<Integer>> list = new ArrayList<>();
-        List<Integer> currow = null;
-        List<Integer> prerow = null;
-        
-        for(int i=0; i<numRows ; i++){
-            currow = new ArrayList<>();
-            for(int j=0; j<=i ; j++){
+        List<List<Integer>> lists = new ArrayList<>();
+        List<Integer> previous = new ArrayList<>();
+        for(int i=0; i<numRows; i++){
+            List<Integer> innerlist = new ArrayList<>();
+            for(int j=0; j<=i; j++){
                 if(j==0 || j==i){
-                    currow.add(1);
+                    innerlist.add(1);
                 }else{
-                    currow.add(prerow.get(j-1) + prerow.get(j));
+                    innerlist.add(previous.get(j-1) + previous.get(j));
                 }
             }
-            list.add(currow);
-            prerow = currow;
+            lists.add(innerlist);
+            previous = innerlist;
         }
-        return list;
+        
+        return lists;
     }
-    
-    //TC O(N2)
-    //SC O(N2)
 }
