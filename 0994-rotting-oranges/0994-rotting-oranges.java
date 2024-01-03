@@ -1,59 +1,63 @@
 class Solution {
     public int orangesRotting(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        int cntfrora = 0;
-
-        boolean[][] visited = new boolean[m][n];
-
-        Queue<Pair> queue = new ArrayDeque<>();
-        //Count fresh oranges & move rotten oranges to queue & mark them visited
-        for(int i=0; i<m ; i++){
-            for(int j=0; j<n ; j++){
-                if(grid[i][j] == 1){
-                    cntfrora++;
-                }else if(grid[i][j]==2){
-                    queue.offer(new Pair(i, j, 0)); //0 refers to time
-                    visited[i][j] = true;
-                }                
+        int rowlen = grid.length;
+        int collen = grid[0].length;
+        boolean[][] visited = new boolean[rowlen][collen];
+        
+        int freshorangecnt = 0;
+        int freshrottencnt = 0;
+        
+        Queue<Triplet> queue = new ArrayDeque<>();
+        
+        //Add Rotten Oranges to Queue
+        for(int i=0; i<rowlen;i++){
+            for(int j=0; j<collen ; j++){
+                if(grid[i][j] == 2 && visited[i][j] == false){
+                    queue.offer(new Triplet(i, j, 0));
+                    visited[i][j]=true;
+                }
+                
+                if(grid[i][j]==1){
+                    freshorangecnt++;
+                }
             }
         }
         
-        int ts =0;
-        int freshrottencnt = 0;
+        int timer = 0;
+        int maxtm = 0;
         
         while(!queue.isEmpty()){
-            Pair pair = queue.poll();
-            int r = pair.row;
-            int c = pair.col;
-            int t = pair.time;
+            Triplet tripl = queue.poll();
+            int row = tripl.row;
+            int col = tripl.col;
+            int rottentime = tripl.time;
             
-            ts = Math.max(t, ts);
+            maxtm = Math.max(maxtm, rottentime);
             
-            
-            int[] rarr = new int[]{-1, 0, 1, 0};
-            int[] carr = new int[]{0, 1, 0, -1};
-            for(int i=0; i<4;i++){
-                int nr = r + rarr[i];
-                int nc = c + carr[i];
-                if(nr>=0 && nr<m && nc>=0 && nc<n &&
-                  grid[nr][nc] == 1 && visited[nr][nc]==false){
-                    queue.offer(new Pair(nr, nc, t+1));
-                    visited[nr][nc] = true;
+            //Check its 4 neighbours
+            int[] neirow = new int[]{0, 1, 0, -1};
+            int[] neicol = new int[]{1, 0, -1, 0};
+            for(int i=0;i<4;i++){
+                int neiuprow = row + neirow[i];
+                int neiupcol = col + neicol[i];
+                if(neiuprow>=0 && neiuprow<rowlen &&  neiupcol>=0 && neiupcol<collen && 
+                    grid[neiuprow][neiupcol] ==1 && visited[neiuprow][neiupcol] == false){
+                    queue.offer(new Triplet(neiuprow, neiupcol, rottentime+1));
+                    visited[neiuprow][neiupcol] = true;
                     freshrottencnt++;
                 }
             }
         }
         
-        return freshrottencnt != cntfrora ? -1 : ts ; 
+        return freshrottencnt==freshorangecnt ? maxtm : -1;
+        
     }
 }
-
-class Pair{
+class Triplet{
     int row;
     int col;
     int time;
-    Pair(int _row, int _col, int _time){
+    Triplet(int _row, int _col, int _time){
         this.row = _row;
         this.col = _col;
         this.time = _time;
