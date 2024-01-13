@@ -1,4 +1,6 @@
 class Solution {
+    //TC - O(x) where x is 2^n
+    //SC - O(x) where x is 2^n
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> subsets = new ArrayList<>();
         List<Integer> subset = new ArrayList<>();
