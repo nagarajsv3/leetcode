@@ -1,82 +1,61 @@
 class LRUCache {
-    Node head = new Node(0,0);
+    int capacity;
+    Node head =new Node(0,0);
     Node tail = new Node(0,0);
-    int capacity = 0;
-    Map<Integer, Node> map = new HashMap<>();
-
+    Map<Integer, Node> map ;
+    
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.head.next = this.tail; 
-        this.tail.previous = this.head;
+        this.map = new HashMap<>();
+        this.head.next = tail;
+        this.tail.prev = head;
     }
     
     public int get(int key) {
         if(map.containsKey(key)){
             Node node = map.get(key);
-            int value = node.value;
-            //Remove
             remove(node);
-            //Insert
-            insert(node);
-            return value;
+            insert(key, node.value);
+            return node.value;
         }else{
             return -1;
         }
     }
     
-    public void put(int key, int value) {
-        //Record Exist. Update
-        if(this.map.containsKey(key)){
-            remove(map.get(key));
-        }
+    void insert(int key, int value){
+        Node node = new Node(key, value);
+        map.put(key, node);
         
-        //New Insert & Capacity Full
-        if(this.map.size() == capacity){
-            //Remove LRU
-            remove(tail.previous);
-        }
-        
-        //New Insert & Capacity available
-        insert(new Node(key, value));
-    }
-
-    void remove(Node node){
-    map.remove(node.key);
-
-    //1   2   3
-    node.previous.next = node.next;
-    node.next.previous = node.previous; 
-}
-
-void insert(Node node){
-    
-        map.put(node.key, node);
-
-        Node headNext = head.next;
-
-        node.next = head.next; //1    2    3
-        head.next.previous = node;
-
+        node.next = head.next;
         head.next = node;
-        node.previous=head; 
-}
-
-
-
-}
-
-
-
-
-class Node{
-    int key;
-    int value;
-    Node previous;
-    Node next;
-
-    Node(int key, int value){
-        this.key = key;
-        this.value= value;
+        
+        node.prev = node.next.prev;
+        node.next.prev = node;
+    }
+    
+    void remove(Node node){
+        map.remove(node.key);
+        
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+    
+    public void put(int key, int value) {
+    //Already Present
+        if(map.containsKey(key)){
+            Node node = map.get(key);
+            remove(node);
+            insert(key, value);
+        }else{
+            if(map.size()<capacity){
+                insert(key, value);
+            }else{
+                remove(tail.prev);
+                insert(key, value);
+            }
+        }
+    //Not Present-Capacity available
+    //Not Present-Capacity Not available    
     }
 }
 
@@ -86,3 +65,14 @@ class Node{
  * int param_1 = obj.get(key);
  * obj.put(key,value);
  */
+
+class Node{
+    int key;
+    int value;
+    Node prev;
+    Node next;
+    Node(int key, int value){
+        this.key= key;
+        this.value = value;
+    }
+}
