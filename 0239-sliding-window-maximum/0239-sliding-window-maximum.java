@@ -3,15 +3,8 @@ class Solution {
         
         //deque to maintain index of values in the decreasing order
         Deque<Integer> deque = new ArrayDeque<>();
-        int outputLn = 0;
 
-        if(k==1){
-            outputLn = nums.length;
-        }else{
-            outputLn = nums.length-k+1;
-        }
-
-        int[] output = new int[outputLn];
+        int[] output = new int[nums.length-k+1];
 
         for(int i=0; i<nums.length; i++){
             //Removing Out Of Bound Indexes from Front
