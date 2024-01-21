@@ -12,11 +12,10 @@ class Solution {
             if(set.contains(nums[i]-1)){   //4 3 2 1 0N
                 //Dont do anything
             }else{
-                int cnt=1;
-                int lowest = nums[i]+1;
-                while(set.contains(lowest)){ //2 3 4 5
+                int cnt=0;
+                while(set.contains(nums[i])){ //2 3 4 5
                     cnt++;                   //2 3 4 5
-                    lowest++;
+                    nums[i]++;
                 }
                 max = Math.max(max,cnt);
             }
