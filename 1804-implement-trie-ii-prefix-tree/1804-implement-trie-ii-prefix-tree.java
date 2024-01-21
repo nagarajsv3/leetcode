@@ -16,10 +16,37 @@ class Trie {
                 node = node.get(ch);
             }
             node.prfwordcount = node.prfwordcount+1;
-            
+            node.endword = true;
         }
         node.eqwordcount = node.eqwordcount+1;
     }
+    
+        public boolean search(String word) {
+        Node node = root;
+        for(int i=0;i<word.length(); i++){
+            char ch = word.charAt(i);
+            if(!node.contains(ch)){
+                return false;
+            }else{
+                node = node.get(ch);
+            }
+        }
+        return node.endword==true;
+    }
+    
+    public boolean startsWith(String prefix) {
+        Node node = root;
+        for(int i=0;i<prefix.length(); i++){
+            char ch = prefix.charAt(i);
+            if(!node.contains(ch)){
+                return false;
+            }else{
+                node = node.get(ch);
+            }
+        }
+        return true;
+    }
+
     
     public int countWordsEqualTo(String word) {
         Node node = this.root;
@@ -77,6 +104,7 @@ class Node{
     Node[] links = new Node[26];
     int prfwordcount;
     int eqwordcount;
+    boolean endword;
     
         boolean contains(char ch){
         return get(ch)!=null  ; 
