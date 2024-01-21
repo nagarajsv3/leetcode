@@ -23,10 +23,9 @@ class Trie {
     
     public int countWordsEqualTo(String word) {
         Node node = this.root;
-        System.out.println("****CountWords");
+
         for(int i=0; i<word.length();i++){
             char ch = word.charAt(i);
-            System.out.println("character="+ch);
             if(!node.contains(ch)){
                 return 0;
             }else{
