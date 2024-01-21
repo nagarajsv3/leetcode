@@ -15,41 +15,41 @@
  */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        
+        List<List<Integer>> list = new ArrayList<>();
+        if(root==null){
+            return list;
+        }
         Queue<Pair> queue = new ArrayDeque<>();
-
-        if(root==null ){
-          return list;
-        }
-
         queue.offer(new Pair(0, root));
+        
         while(!queue.isEmpty()){
-          Pair pair = queue.poll();
-          if(pair!=null){
-            if(pair.level == list.size()){
-              list.add(new ArrayList<Integer>());  
+            Pair polled = queue.poll();
+            TreeNode node = polled.node;
+            int level = polled.level;
+            
+            if(list.size() == level){
+                list.add(new ArrayList<Integer>());
             }
-
-            list.get(pair.level).add(pair.node.val);
-            if(pair.node!=null && pair.node.left !=null){
-              queue.offer(new Pair(pair.level+1,pair.node.left));
+            list.get(level).add(node.val);
+            
+            if(node.left!=null){
+                queue.offer(new Pair(level+1, node.left));
             }
-            if(pair.node!=null && pair.node.right !=null){
-              queue.offer( new Pair(pair.level+1,pair.node.right ));
+            
+            if(node.right!=null){
+                queue.offer(new Pair(level+1, node.right));
             }
-          }
         }
-
-return list;
+        return list;
     }
+}
 
-    class Pair{
-      int level;
-      TreeNode node;
-      Pair(int _l, TreeNode _n){
-        this.level = _l;
-        this.node = _n;
-      }
-
+class Pair{
+    int level;
+    TreeNode node;
+    Pair(int level, TreeNode node){
+        this.level = level;
+        this.node = node;
     }
 }
