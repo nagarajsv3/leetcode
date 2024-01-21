@@ -8,61 +8,63 @@ class Solution {
             return t;
         }
         
-        //Calculate Freq Map of t
-        Map<Character , Integer> map = getFrequencyMap(t);
-        int count = map.size();
+        if(t.length()> s.length()){
+            return "";
+        }
         
-        int min = Integer.MAX_VALUE;
-        int substracquirer = 0;
-        int bestsubfinder = 0;
-        int len = s.length();
-        String substr = "";
-        boolean found = false;
+        int count = 0;
+        Map<Character, Integer> freqMap = new HashMap<>();
+        for(int i=0;i<t.length();i++){
+            char ch = t.charAt(i);
+            freqMap.put(ch, freqMap.getOrDefault(ch, 0)+1);        
+        }
+        count = freqMap.size();
         
-        while(substracquirer < len){
-            char ch = s.charAt(substracquirer);
+        int acp = 0;
+        int rep = 0;
+        int startPos = Integer.MAX_VALUE;
+        int endPos = Integer.MAX_VALUE;
+        int minLen = Integer.MAX_VALUE;
+        String substr="";
+        boolean found =false;
+        while(acp< s.length() && rep<s.length()){
             
-            substracquirer++;
-            if(map.containsKey(ch)){
-                map.put(ch, map.get(ch) -1);
-                if(map.get(ch) == 0){
-                    count = count -1;
-                    if(count != 0){
-                        continue;
-                    }else{
-                        while(count==0 && bestsubfinder < len){
-                            
-                            found = true;
-                            char rch = s.charAt(bestsubfinder);
-                                       
-                            bestsubfinder++;
-                            if(map.containsKey(rch)){
-                                map.put(rch, map.get(rch) + 1);
-                                if(map.get(rch) > 0){
-                                    count = count + 1;
-                                }
-                            }
-                        }
-                        
-                        if(found && min > (substracquirer - bestsubfinder + 1)){
-                            
-                            min = substracquirer - bestsubfinder + 1;
-                            substr = s.substring(bestsubfinder-1, substracquirer);
-                        }                                                                     
+            while(acp< s.length() && count > 0){
+                
+                //Keep acquiring
+                char sch = s.charAt(acp);
+                if(freqMap.containsKey(sch)){
+                    freqMap.put(sch, freqMap.get(sch)-1);
+                    if(freqMap.get(sch) ==0 ){
+                        count--;
                     }
                 }
+                acp++;
+            }
+            
+            while(rep<s.length() && count == 0){
+                //Keep Releasing
+                found=true;
+                char sch = s.charAt(rep);
+                if(freqMap.containsKey(sch)){
+                    freqMap.put(sch, freqMap.get(sch)+1);
+                    if(freqMap.get(sch)>0){
+                        count++;
+                    }
+                }
+                rep++;
+            }
+            
+            if(found && (acp-rep+1) < minLen ){
+                    minLen = acp-rep+1;
+                    startPos = rep - 1;
+                    endPos = acp -1;
+                    substr = s.substring(startPos, endPos+1);
+                System.out.println("startpos="+startPos+" ;endPos="+endPos+" ;substr="+substr+";minLen="+minLen);
+                    
+                found=false;
             }
         }
         return substr;
-        
-    }
-    
-    Map<Character , Integer> getFrequencyMap(String t){
-        Map<Character , Integer> map = new HashMap<>();
-        for(int i=0;i<t.length();i++){
-            char ch = t.charAt(i);
-            map.put(ch, map.getOrDefault(ch,0)+1);
-        }
-        return map;
-    }
+}
 }
