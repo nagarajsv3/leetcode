@@ -1,29 +1,24 @@
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        
-        //deque to maintain index of values in the decreasing order
-        Deque<Integer> deque = new ArrayDeque<>();
-
+        ArrayDeque<Integer> deq = new ArrayDeque<>();
         int[] output = new int[nums.length-k+1];
-
+        int m=0;
         for(int i=0; i<nums.length; i++){
-            //Removing Out Of Bound Indexes from Front
-            if(! deque.isEmpty() && deque.peek() == (i-k)){
-                deque.poll();
+            //Remove Out of bound
+            if(!deq.isEmpty() && deq.peek() == (i-k)){
+                deq.poll();
             }
-            //Removing Smaller Element Indexes from Back //We are looking for max. so no point of mainting index of small values
-            while(! deque.isEmpty() && nums[i] > nums[deque.peekLast()]){
-                deque.pollLast();
-            }
-            //Add index to Deque 
-            deque.offer(i);
-            //Writing to output
-            if(i >= k-1){
-                output[i-(k-1)] = nums[deque.peek()];
+            //Remove ALl smaller
+            while(!deq.isEmpty() && nums[i] > nums[deq.peekLast()]){
+                deq.pollLast();
+            }    
+            //Add
+            deq.offer(i);    
+            //Peek    
+            if(i >= (k-1)){
+                output[m++] = nums[deq.peek()];
             }
         }
-
-            return output;
-
+        return output;
     }
 }
