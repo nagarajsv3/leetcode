@@ -13,9 +13,10 @@ class Solution {
                 //Dont do anything
             }else{
                 int cnt=0;
-                while(set.contains(nums[i])){ //2 3 4 5
+                int lowest = nums[i];
+                while(set.contains(lowest)){ //2 3 4 5
                     cnt++;                   //2 3 4 5
-                    nums[i]++;
+                    lowest++;
                 }
                 max = Math.max(max,cnt);
             }
