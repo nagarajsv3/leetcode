@@ -23,7 +23,7 @@ class Solution {
             }
         }
         
-        int timer = 0;
+
         int maxtm = 0;
         
         while(!queue.isEmpty()){
