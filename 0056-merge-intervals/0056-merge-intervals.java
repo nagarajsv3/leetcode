@@ -11,20 +11,23 @@ class Solution {
             if(each[0] <= end){
                 end = Math.max(each[1], end);
             }else{
+                //Copy all range except last one
                 int[] mint = new int[2];
                 mint[0] = start;
                 mint[1] = end;
                 output[k++] = mint;
                 
+                //pre condition for next iteration
                 start = each[0];
                 end = each[1];
             }
         }
 
+        //Copy last range
         int[] mint2 = new int[2];
-                mint2[0] = start;
-                mint2[1] = end;
-                                output[k++] = mint2;
+        mint2[0] = start;
+        mint2[1] = end;
+        output[k++] = mint2;
         
         return Arrays.copyOfRange(output, 0,k);
     }
