@@ -1,36 +1,31 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
-        sortintervals(intervals);
-        return mergeintervals(intervals);
-    }
-    
-    int[][] mergeintervals(int[][] intvs){
-        int[] intv = intvs[0];
-        int start = intv[0];
-        int end = intv[1];
-        List<int[]> list = new ArrayList<>();
+        Arrays.sort(intervals, (x,y)-> x[0] - y[0]);
         
-        for(int[] each : intvs){
+        int[][] output = new int[intervals.length][2];
+        
+        int start=intervals[0][0];
+        int end=intervals[0][1];
+        int k=0;
+        for(int[] each : intervals){
             if(each[0] <= end){
-                end = Math.max(end, each[1]);
+                end = Math.max(each[1], end);
             }else{
-                list.add(new int[]{start, end});
+                int[] mint = new int[2];
+                mint[0] = start;
+                mint[1] = end;
+                output[k++] = mint;
+                
                 start = each[0];
                 end = each[1];
             }
         }
+
+        int[] mint2 = new int[2];
+                mint2[0] = start;
+                mint2[1] = end;
+                                output[k++] = mint2;
         
-        list.add(new int[]{start, end});
-        
-        //Form output
-        int[][] out = new int[list.size()][2];
-        for(int i=0;i<out.length;i++){
-            out[i] = list.get(i);
-        }
-        return out;
-    }
-    
-    void sortintervals(int[][] intervals){
-        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        return Arrays.copyOfRange(output, 0,k);
     }
 }
