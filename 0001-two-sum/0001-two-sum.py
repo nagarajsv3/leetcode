@@ -5,8 +5,15 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        val_idx_dict = {}
-        for i in range(len(nums)):
-            if val_idx_dict.get(target - nums[i]) is not None:
-                return [i, val_idx_dict.get(target - nums[i])]
-            val_idx_dict[nums[i]] = i
+
+        num_ind_map = {}
+
+        for index,num in enumerate(nums):
+            if (target - num) in num_ind_map:
+                return [index, num_ind_map[target - num]]
+            else:
+                num_ind_map[num] = index
+                 
+
+
+        
