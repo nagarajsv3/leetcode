@@ -1,10 +1,4 @@
 class Solution(object):
-    def twosum_brute(self, numbers, target):
-        arr_len = len(numbers)
-        for i in range(arr_len):
-            for j in range(i+1, arr_len):
-                if (numbers[i] + numbers[j] == target):
-                    return [i+1, j+1]
 
     def twoSum(self, numbers, target):
         """
